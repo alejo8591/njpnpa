@@ -1,8 +1,8 @@
 var express = require('express');
 var app = express();
-var Client = require('node-onesignal');
-var client_one = Client('570909850918', 'YTJmNGU0NzktNzczNC00ZjI5LWI2ZTgtOGJmNTNlZWMwYzM4');
-var client_two = Client('8200443519', 'ZjQ2NWM4OTQtOGVmOC00ZDU3LThkNmEtMDVmMzc1Y2QzNmIw');
+var OneSignalClient = require('node-onesignal').default;
+var client_one = OneSignalClient('570909850918', 'YTJmNGU0NzktNzczNC00ZjI5LWI2ZTgtOGJmNTNlZWMwYzM4');
+var client_two = OneSignalClient('8200443519', 'ZjQ2NWM4OTQtOGVmOC00ZDU3LThkNmEtMDVmMzc1Y2QzNmIw');
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
