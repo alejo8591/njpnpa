@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var Client = require('node-onesignal').default;
+var OneSignal = require('onesignal-node');
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
@@ -8,15 +8,49 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
-  var client_one = new Client('c0eb632b-f498-4a63-a277-9ef5948a5e65', 'YTJmNGU0NzktNzczNC00ZjI5LWI2ZTgtOGJmNTNlZWMwYzM4');
-  var client_two = new Client('012bfcf0-8c09-4b9b-aa35-a47b5c13777a', 'ZjQ2NWM4OTQtOGVmOC00ZDU3LThkNmEtMDVmMzc1Y2QzNmIw');
-  client_one.sendNotification('lab11001', {
-      included_segments: 'all'
-  });
-  client_two.sendNotification('lab11002', {
-      included_segments: 'all'
-  });
-  response.render('pages/index');
+
+    var lab11001Client = new OneSignal.Client({
+        userAuthKey: 'NzY4YTgxODktYjY0OC00ZDk5LWFhMDgtYzJiNGIxOWY4Yjc3',
+        app: { appAuthKey: 'YTJmNGU0NzktNzczNC00ZjI5LWI2ZTgtOGJmNTNlZWMwYzM4', appId: 'c0eb632b-f498-4a63-a277-9ef5948a5e65' }
+    });
+
+    var lab11002Client = new OneSignal.Client({
+        userAuthKey: 'NzY4YTgxODktYjY0OC00ZDk5LWFhMDgtYzJiNGIxOWY4Yjc3',
+        app: { appAuthKey: 'ZjQ2NWM4OTQtOGVmOC00ZDU3LThkNmEtMDVmMzc1Y2QzNmIw', appId: '012bfcf0-8c09-4b9b-aa35-a47b5c13777a' }
+    });
+
+    var firstNotificationlab11001Client = new OneSignal.Notification({
+        contents: {
+            en: "Test notification lab11001"
+        }
+    });
+
+    var firstNotificationlab11002Client = new OneSignal.Notification({
+        contents: {
+            en: "Test notification lab11002"
+        }
+    });
+
+    firstNotificationlab11001Client.setIncludedSegments(['All']);
+
+    firstNotificationlab11002Client.setIncludedSegments(['All']);
+
+    lab11001Client.sendNotification(firstNotificationlab11001Client)
+        .then(function (response) {
+            console.log(response.data, response.httpResponse.statusCode);
+        })
+        .catch(function (err) {
+            console.error('Something went wrong...', err);
+        });
+
+    lab11002Client.sendNotification(firstNotificationlab11002Client)
+        .then(function (response) {
+            console.log(response.data, response.httpResponse.statusCode);
+        })
+        .catch(function (err) {
+            console.error('Something went wrong...', err);
+        });
+    response.render('pages/index');
 });
 
 app.listen(app.get('port'), function() {
